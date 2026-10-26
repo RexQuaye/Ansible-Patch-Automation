@@ -205,9 +205,216 @@
 
 ---
 
+
+<br />
+<br />
+
+<a name="ticket-18"></a>
+<h1>Ticket #18 — Create Shared Scripts Directory Using Ansible</h1>
+
+<h2>Languages and Utilities Used</h2>
+- <b>Bash</b>
+- <b>Ansible</b>
+- <b>YAML</b>
+- <b>vi</b>
+
+<h2>Environments Used</h2>
+- <b>CentOS Stream 9</b>
+- <b>VMware vSphere (VM console)</b>
+<br />
+<h2>Project walk-through:</h2>
+
+**Task:** The programmers on the webmasters team want a shared directory for collaboration on scripting knowledge for their division on all development servers. Use Ansible to create it.
+
+**Objective:** Practice infrastructure automation and orchestration using Ansible playbooks.
+
+**Requirements:**
+- Successful creation of the directory using Ansible: dev-ansible to dev-app and dev-performance
+- Directory path: /opt/scripts/{yourusername}/
+- User: {yourusername}
+- Group: webmasters
+- Permission: 775
+
+<br />
+<br />
+<br />
+<p align="center">
+<b>Creating the playbook for the shared scripts directory:</b>
+<br/>
+<img width="751" height="513" alt="image" src="https://github.com/user-attachments/assets/b6cfd53a-c08d-44b5-8363-3b354a7058f8" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>First run: directory created on both servers:</b>
+<br/>
+<img width="975" height="458" alt="image" src="https://github.com/user-attachments/assets/96a05955-8fcd-42e4-8634-6f73b5de8239" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Second run: no changes needed:</b>
+<br/>
+<img width="975" height="502" alt="image" src="https://github.com/user-attachments/assets/7212e49a-7185-4bf7-9381-869ed66d510a" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Verifying the directory owner, group and permissions:</b>
+<br/>
+<img width="975" height="282" alt="image" src="https://github.com/user-attachments/assets/c483a600-7845-495f-b78b-c7aa362a2783" />
+
+
+
+</p>
+
+<br />
+
+<b><u>Solution:</u></b>  I wrote an Ansible playbook, rexq-create-dir.yml, that targets my dev-rexq group and uses the ansible.builtin.file module to create /opt/scripts/rquaye with state directory, owner rquaye, group webmasters and mode 0775. My first run failed because I referenced the wrong location for the saved playbook file, and after correcting the path the playbook ran successfully against dev-app and dev-performance. The first run reported a change on both servers, and a second run reported no changes, which confirms the directory already matched the desired state. I verified the result with ls -ld, run through Ansible, which showed drwxrwxr-x (775) with owner rquaye and group webmasters on both servers.
+
+<br />
+<br />
+
+<p align="right"><a href="#top">⬆ Back to top</a></p>
+
+---
+
+
 <br />
 <br />
 
 
+<a name="ticket-50"></a>
+<h1>Ticket #50 — Create Tasks Using an Ansible Playbook</h1>
+
+<h2>Languages and Utilities Used</h2>
+- <b>Bash</b>
+- <b>Ansible</b>
+- <b>YAML</b>
+- <b>yum</b>
+- <b>vi</b>
+
+<h2>Environments Used</h2>
+- <b>CentOS Stream 9</b>
+- <b>VMware vSphere (VM console)</b>
+<br />
+<h2>Project walk-through:</h2>
+
+**Task:** Create an Ansible playbook that performs the tasks below on dev-app-[initials].procore.prod1.
+
+**Objective:** Practice infrastructure automation and orchestration using Ansible playbooks.
+
+**Requirements:**
+- VM: dev-app
+- Ansible playbook that:
+  - Creates the local user tfleming
+  - Expires tfleming's password
+  - Installs tmux
+
+<br />
+<br />
+<br />
+<p align="center">
+<b>Creating the playbook file:</b>
+<br/><img width="937" height="74" alt="image" src="https://github.com/user-attachments/assets/3bf01189-7025-46cf-bc8b-8bb58a6bc165" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Playbook contents: create user, expire password, install tmux:</b>
+<br/>
+<img width="896" height="372" alt="image" src="https://github.com/user-attachments/assets/6af3cca8-9aa6-4dd1-9183-da998baa0b7d" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Syntax check passes, first run fails with an unreachable host:</b>
+<br/>
+<img width="947" height="400" alt="image" src="https://github.com/user-attachments/assets/1d7bd51d-fce5-4ad9-bee5-0a894f720c77" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Run with SSH and sudo prompts: tmux install fails on the mariadb repo:</b>
+<br/>
+<img width="936" height="475" alt="image" src="https://github.com/user-attachments/assets/908218b9-8b06-4833-bb3c-d63435a5a923" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Updating the playbook to skip the failing mariadb repo:</b>
+<br/><img width="884" height="778" alt="image" src="https://github.com/user-attachments/assets/c5b1fcba-c0c9-4a47-8fb2-200c63a57dfd" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Successful playbook run:</b>
+<br/><img width="954" height="525" alt="image" src="https://github.com/user-attachments/assets/e5a7d09c-56cd-4cc5-a252-2d954af0b19f" />
+
+
+
+</p>
+
+<br />
+
+<b><u>Solution:</u></b>  I wrote an Ansible playbook, ticket50.yml, with three tasks for dev-app: create the local user tfleming with the user module, expire that user's password with chage -d 0, and install tmux with yum. The syntax check passed, but the first run failed because the host was unreachable and SSH authentication was denied. I re-ran the playbook with --ask-pass and --ask-become-pass so Ansible prompted for the SSH and sudo passwords. The user and password-expiry tasks then worked, but the tmux install failed because yum could not download metadata for the mariadb repository. I added disablerepo: mariadb to the install task so yum skips that repository. The final run completed with ok=4, changed=1, failed=0 and unreachable=0.
+
+<br />
+<br />
+
+<p align="right"><a href="#top">⬆ Back to top</a></p>
+
+---
+
+<br />
+<br />
 
 
