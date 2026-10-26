@@ -414,6 +414,115 @@
 
 ---
 
+
+<br />
+<br />
+
+<a name="ticket-51"></a>
+<h1>Ticket #51 — Close Ports Using an Ansible Playbook</h1>
+
+<h2>Languages and Utilities Used</h2>
+- <b>Bash</b>
+- <b>Ansible</b>
+- <b>YAML</b>
+- <b>firewalld</b>
+- <b>systemctl</b>
+
+<h2>Environments Used</h2>
+- <b>CentOS Stream 9</b>
+- <b>VMware vSphere (VM console)</b>
+<br />
+<h2>Project walk-through:</h2>
+
+**Task:** Create an Ansible playbook to close ports 80 and 443 on dev-app-[initials].procore.prod1.
+
+**Objective:** Practice infrastructure automation and orchestration using Ansible playbooks.
+
+**Requirements:**
+- VM: dev-app
+- Ansible playbook that closes ports 80 and 443
+
+<br />
+<br />
+<br />
+<p align="center">
+<b>Creating the playbook that closes ports 80 and 443:</b>
+<br/><img width="754" height="544" alt="image" src="https://github.com/user-attachments/assets/08b669d7-2d52-4385-8077-ae752a36e989" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Playbook contents:</b>
+<br/><img width="833" height="396" alt="image" src="https://github.com/user-attachments/assets/8ce4d761-e336-47d6-93e4-13516fd6349f" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>First run fails with a firewalld error:</b>
+<br/><img width="949" height="864" alt="image" src="https://github.com/user-attachments/assets/cea619c4-3d95-475e-ac86-ca68faffec58" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Restarting firewalld on dev-app:</b>
+<br/><img width="939" height="603" alt="image" src="https://github.com/user-attachments/assets/a11127bb-da23-4975-b59a-4b0b10ed3fa6" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Returning to dev-ansible:</b>
+<br/>
+<img width="933" height="232" alt="image" src="https://github.com/user-attachments/assets/3540cc6c-7af0-443b-b09c-8dde63e2bccd" />
+
+
+
+</p>
+
+<br />
+<br />
+<br />
+
+<p align="center">
+<b>Successful playbook run:</b>
+<br/><img width="943" height="461" alt="image" src="https://github.com/user-attachments/assets/99966630-c568-43bf-b110-2d10b6deebb0" />
+
+
+
+</p>
+
+<br />
+
+<b><u>Solution:</u></b>  I wrote an Ansible playbook, ticket51.yml, with two tasks that use the firewalld module to close ports 80/tcp and 443/tcp on dev-app, with the change applied both permanently and immediately. The first run failed on the first task with a D-Bus "no reply" error from firewalld on dev-app. I connected to dev-app and restarted the firewalld service. I also tried to run the playbook from dev-app by mistake, but Ansible is installed on the dev-ansible control server, not on dev-app, so I went back to dev-ansible and re-ran it there. This time it completed with ok=3, changed=1, failed=0 and unreachable=0. Port 80 was closed by the playbook, and port 443 required no change.
+
+<br />
+<br />
+
+<p align="right"><a href="#top">⬆ Back to top</a></p>
+
 <br />
 <br />
 
